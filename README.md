@@ -1,8 +1,34 @@
-# yle-news-reader
-A python reader for processing yle-news archive (http://urn.fi/urn:nbn:fi:lb-2017070501)
+# YLE NEWS ARCHIVE PRASER
+A python reader for processing yle-news archive (http://urn.fi/urn:nbn:fi:lb-2017070501) into Pandas dataframes. 
 
-Usage: `python3 yle_reader.py --zip ylenews-fi-2011-2018-src.zip | gzip -c > ylenews-fi-2011-2018-src.txt.gz`
+Archive zip can be downloaded from: https://korp.csc.fi/download/YLE/fi/ylenews-fi-2011-2018-src
 
+Usage: `python3 yle_reader_to_dataframe.py --zipfile ylenews-fi-2011-2018-src.zip --outputdir ./data/parsed/`
+
+
+#### Install dependencies
+To install the dependencies this application needs, run:
+
+```
+pip3 install --upgrade -r requirements.txt
+```
+
+### yle_reader_to_dataframe.py
+Reads and parse YLE json files from the zip and save them as a pickles which can be loaded into a Pandas dataframe.
+
+Any pickled Pandas dataframe file can be loaded as: `pandas.read_pickle(path)`
+Example Output:
+```
+|     |   doc_id | yle_id    | url                                         | published                | text                                        |
+|----:|---------:|:----------|:--------------------------------------------|:-------------------------|:--------------------------------------------|
+| 1 |        5 | 3-5307061 | http://yle.fi/uutiset/kesatyoseteli_on_o... | 2011-01-17T08:21:23+0200 | Setelin arvo on 220 euroa. Setelin avull... |
+| 2 |        5 | 3-5307087 | http://yle.fi/uutiset/uusi_kone_perkaa_p... | 2011-01-17T05:39:26+0200 | Arviolta muutaman kymmenen tuhatta euroa... |
+| 3 |        5 | 3-5306431 | http://yle.fi/uutiset/lunta_huonosti_lat... | 2011-01-14T13:47:20+0200 | Kemissä joudutaan supistamaan latureitti... |
+| 4 |        5 | 3-5307519 | http://yle.fi/uutiset/kulttuuripaakaupun... | 2011-01-17T17:06:58+0200 | Turun kulttuuripääkaupunkivuoden avajais... |
+|...|
+```
+
+### yle_reader.py
 Reads YLE json files from the zip, and returns plain text, where metadata lines are marked with `###C:`. Note that most of the metadata fields included in the original json are not preserved.
 
 Example of the output:
@@ -21,7 +47,9 @@ Ennakkoasetelmat:
 Illan ainoassa naisten lentopallon Mestaruusliigan kamppailussa kohtaavat...
 ```
 
-Can be further processed with Turku-neural-parser-pipeline (https://github.com/TurkuNLP/Turku-neural-parser-pipeline) to include tokenization, sentence splitting, lemmatization, tagging and parsing.
+
+### Parsing with TurkuNLP-parser
+Finnish text can be further processed with Turku-neural-parser-pipeline (https://github.com/TurkuNLP/Turku-neural-parser-pipeline) to include tokenization, sentence splitting, lemmatization tagging and parsing.
 
 Example:
 ```
